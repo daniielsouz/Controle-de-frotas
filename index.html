@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="img/icone - frete.jpg"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js" defer></script>
+    <title>Controle de Frota</title>
+  </head>
+  <body>
+    <header class="cabecalho">
+      <h1 class="cabecalho_titulo">Controle de Frotas - Daniel</h1>
+    </header>
+    <main class="corpo_documentacao">
+      <section class="sessao_viagens">
+        <table class="tabela_viagens">
+          <tr class="tabela_viagens_informacoes">
+            <th class="tabela_viagens_dados_titulo">Data Saída</th>
+            <th class="tabela_viagens_dados_titulo">Motorista</th>
+            <th class="tabela_viagens_dados_titulo">Placa Veículo</th>
+            <th class="tabela_viagens_dados_titulo">De</th>
+            <th class="tabela_viagens_dados_titulo">Até</th>
+          </tr>
+        </table>
+      </section>
+      <section class="sessao_cadasto">
+        <div class="adicionar_viagem">
+          <h2 class="adicionar_viagem_titulo">Dados da Viagem</h2>
+          <div class="adicionar_viagem_inputs">
+            <input class="data" type="date" name="input_data" />
+            <input class="motorista" type="text" placeholder="Motorista" />
+            <select class="placa" name="" id="">
+              <option class="placa_opcoes_titulo" disabled selected>
+                Placa do Veículo
+              </option>
+            </select>
+            <input class="de" type="text" placeholder="Trajeto ida" />
+            <input class="ate" type="text" placeholder="Trajeto volta" />
+          </div>
+          <div class="dados_placa_div oculto">
+            <p class="alerta_placa"></p>
+            <input
+              class="dados_placa_numero"
+              type="text"
+              placeholder="Informe a placa"
+              maxlength="7"
+              required
+            />
+            <button class="bt bt_salvar_placa">Salvar</button>
+            <button class="bt bt_cancelar_cadastro">Cancelar</button>
+          </div>
+        </div>
+        <div class="adicionar_viagem_bt">
+          <button class="bt bt_cadastrar_placa">Cadastrar Placa</button>
+          <button class="bt bt_remover_placa">Remover Placa</button>
+        </div>
+        <button class="bt bt_adicionar_viagem">Adicionar Viagem</button>
+      </section>
+    </main>
+    <section class="historico">
+      <p class="historico_dados">
+        <img class="img_historico" src="img/caminhao-icone.png" alt="" />
+      </p>
+    </section>
+  </body>
+</html>
