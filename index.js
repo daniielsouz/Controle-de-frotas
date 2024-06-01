@@ -1,122 +1,256 @@
-const placas = [];
-const viagens = [];
-const divInputsDadosViagem = document.querySelector('.adicionar_viagem_inputs');
-const btCadastrarPlaca = document.querySelector('.bt_cadastrar_placa');
-const btRemoverPlaca = document.querySelector('.bt_remover_placa');
-const btAdicionarViagem = document.querySelector('.bt_adicionar_viagem');
+//Array criado para armazenar os dados da viagem
+let viagens = [];
+let viagensConcluidas = [];
+//Array criado para armazenar os dados das placas
+let placasCadastradas = [];
+//Buscando botões
+const botaoAdicionarViagem = document.getElementById('adicionar_viagem');
+const botaoCadastrarPlaca = document.getElementById('cadastrarPlaca');
+const botaoRemoverPlaca = document.getElementById('removerPlaca');
 
 
-function cadastrarPlacaSistema() {
-  function ocultar(ocultar, mostrar) {
-    ocultar.classList.add('oculto');
-    mostrar.classList.remove('oculto');
-  }
-  const divCadastrarPlaca = document.querySelector('.dados_placa_div');
-  const numeroPlacaAdicionar = document.querySelector('.dados_placa_numero');
-  const placasOpçoes = document.querySelector('.placa');
-  const btSalvarPlaca = document.querySelector('.bt_salvar_placa');
-  const btCancelarCadastroPlaca = document.querySelector('.bt_cancelar_cadastro');
-  const enunciadoTitulo = document.querySelector('.adicionar_viagem_titulo');
 
-  ocultar(divInputsDadosViagem, divCadastrarPlaca);
-  btCadastrarPlaca.classList.add('oculto');
-  btRemoverPlaca.classList.add('oculto');
-  numeroPlacaAdicionar.focus();
+//Buscando os valores do input
+const valorData = document.getElementById('input_data');
+const placa = document.getElementById('input_placas');
+const motorista = document.getElementById('input_motorista');
+const saida = document.getElementById('input_saida');
+const chegada = document.getElementById('input_chegada');
+//Buscando divs
+const divInputs = document.querySelector('.div_inputs')
+const divBotaoPlaca = document.querySelector('.bts_placa');
+const opçoesPlacas = document.querySelector('.inputs_remover_placa');
 
-  enunciadoTitulo.textContent = 'Cadastrar Placa'
+function atualizarDados() {
+  //Buscando as div das tabelas
+  const tabelaViagem = document.getElementById('tabela_viagem');
+  const tabelaHistorico = document.getElementById('tabela_historico');
 
-  btSalvarPlaca.addEventListener('click', () => {
-    if (numeroPlacaAdicionar) {
-      if (numeroPlacaAdicionar.value.length === 7) {
 
-        placas.push(numeroPlacaAdicionar.value.toUpperCase());
-        placasOpçoes.innerHTML = `            <select class="placa" name="" id="">
-        <option class="placa_opcoes_titulo" disabled selected>
-        Placa do Veículo
-        </option>`;
-        placas.forEach((elemento, index) => {
-          placasOpçoes.innerHTML += `<option class="placa_opcoes" value="${elemento}" data-value="${index}">${elemento}</option>`
-        });
-        ocultar(divCadastrarPlaca, divInputsDadosViagem);
-        btCadastrarPlaca.classList.remove('oculto');
-        btRemoverPlaca.classList.remove('oculto');
-        numeroPlacaAdicionar.value = '';
-        enunciadoTitulo.textContent = 'Dados da Viagem'
-      } else {
-        alert('Favor revisar se o número dá placa está correto')
-      }
+  placa.innerHTML = `            
+  <option selected disabled value="Placa veículo">
+  Placa veículo
+  </option>`;
+
+  placasCadastradas.forEach(i => {
+    //Verificando se o veiculo está viajando,caso sim, será desabilitado a selação da placa até o retorno 
+    if (i.viajando) {
+      placa.innerHTML += `<option value="${i.placa}" selected disabled>${i.placa}</option>
+      `;
     } else {
-      alert('Ops, acho que você esqueceu de colocar a placa!');
-      numeroPlacaAdicionar.focus();
+
+      placa.innerHTML += `<option value="${i.placa}">${i.placa}</option>
+      `;
     }
   })
-  btCancelarCadastroPlaca.addEventListener('click', () => {
-    ocultar(divCadastrarPlaca, divInputsDadosViagem);
-    btCadastrarPlaca.classList.remove('oculto');
-    btRemoverPlaca.classList.remove('oculto');
-    numeroPlacaAdicionar.value = '';
-    enunciadoTitulo.textContent = 'Dados da Viagem'
+
+  tabelaViagem.innerHTML = `          
+<tr class="tabela_linha">
+<th class="tabela_coluna tabela_titulo">Data</th>
+<th class="tabela_coluna tabela_titulo">Placa</th>
+<th class="tabela_coluna tabela_titulo">Motorista</th>
+<th class="tabela_coluna tabela_titulo">Destido saida</th>
+<th class="tabela_coluna tabela_titulo">Destino chegada</th>
+</tr>`;
+
+  viagens.forEach((i, index) => {
+    tabelaViagem.innerHTML += `
+<tr class="tabela_linha" index="${index}">
+<td class="tabela_coluna">${i.data}</td>
+<td class="tabela_coluna">${i.placa}</td>
+<td class="tabela_coluna">${i.motorista}</td>
+<td class="tabela_coluna">${i.destinoSaida}</td>
+<td class="tabela_coluna">${i.destinoChegada}</td>
+<td class="tabela_coluna_botao">
+  <button class="botao botao_retorno">Informar retorno</button>
+</td>
+</tr>
+`;
+  })
+
+  const botaoRetorno = document.querySelectorAll('.botao_retorno');
+
+  tabelaHistorico.innerHTML = ``
+  viagensConcluidas.forEach(i => {
+    tabelaHistorico.innerHTML += `
+    <td class="tabela_coluna img">
+    <img src="/img/concluido.svg" alt="carro" id="img" />
+  </td>
+  <td class="tabela_coluna">${i.data}</td>
+  <td class="tabela_coluna">${i.placa}</td>
+  <td class="tabela_coluna">${i.motorista}</td>
+  <td class="tabela_coluna">${i.destinoSaida}</td>
+  <td class="tabela_coluna">${i.destinoChegada}</td>
+</tr>
+  `
+  })
+
+  botaoRetorno.forEach((i, index) => {
+    i.addEventListener('click', () => {
+      viagensConcluidas.push(viagens[index])
+      const placaRetornada = viagens[index].placa
+      placasCadastradas.forEach(i => {
+        if (i.placa == placaRetornada) {
+          i.viajando = false
+        }
+      })
+      viagens.splice(index, 1)
+      atualizarDados()
+    })
 
   })
+
+  //Limpando todos os campos dos inputs 
+  valorData.value = '';
+  placa.value = 'Placa veículo';
+  motorista.value = '';
+  saida.value = '';
+  chegada.value = '';
 
 }
 
 function adicionarViagem() {
-  const dadosViagens = document.querySelector('.tabela_viagens');
-  const dadosData = document.querySelector('.data').value.split('-');
-  const data = dadosData.reverse().join('/');
-  const motorista = document.querySelector('.motorista');
-  const placa = document.querySelector('.placa');
-  const de = document.querySelector('.de');
-  const ate = document.querySelector('.ate');
-  if (data && motorista.value && placa.value != 'Placa do Veículo' && de.value && ate.value) {
+  //Buscando o paragrafo que contém a mensagens de erro 
+  const erroInputs = document.getElementById('erro_inputs');
+  //Criando uma condicional para verificar se todos os campos foram preenchidos
+  const data = valorData.value.split('-').reverse().join('/');
+  if (valorData.value && placa.value != "Placa veículo" && motorista.value && chegada.value && saida.value) {
+    //Salvando os valores em um objeto e adicionando no array
     viagens.push({
       data: data,
-      motorista: motorista.value,
       placa: placa.value,
-      de: de.value,
-      ate: ate.value,
-      retornado: false
-    })
-    dadosViagens.innerHTML = `<tr class="tabela_viagens_informacoes">
-  <th class="tabela_viagens_dados_titulo">Data Saída</th>
-  <th class="tabela_viagens_dados_titulo">Motorista</th>
-  <th class="tabela_viagens_dados_titulo">Placa Veículo</th>
-  <th class="tabela_viagens_dados_titulo">De</th>
-  <th class="tabela_viagens_dados_titulo">Até</th>
-</tr>`
-    viagens.forEach((i, index) => {
+      motorista: motorista.value,
+      destinoSaida: saida.value,
+      destinoChegada: chegada.value,
+    });
 
-      dadosViagens.innerHTML += `      <tr class="tabela_viagens_relatorio" index ="${index}">
-      <td class="tabela_viagens_dados">${i.data}</td>
-      <td class="tabela_viagens_dados">${i.motorista}</td>
-      <td class="tabela_viagens_dados dados_placa" >
-        ${i.placa}
-      </td>
-      <td class="tabela_viagens_dados">${i.de}</td>
-      <td class="tabela_viagens_dados">${i.ate}</td>
-      <td class="tabela_viagens_dados_retorno">
-        <input class="data_retorno oculto" type="date" />
-        <button class="bt salvar_retorno oculto">Salvar</button>
-        <button class="bt informar_retorno">Informar retorno</button>
-      </td>
-    </tr>`
-      data.value = 'dd/mm/aaaa'
-      motorista.value = ''
-      placa.value = 'Placa do Veículo'
-      de.value = ''
-      ate.value = ''
-    })
+    for (let i = 0; i < placasCadastradas.length; i++) {
+      for (let y = 0; y < viagens.length; y++) {
+        if (placasCadastradas[i].placa === viagens[y].placa) {
+          placasCadastradas[i].viajando = true
+        }
+      }
+    };
+
+
+    //Limpando o campo de aviso 
+    erroInputs.textContent = '';
   } else {
-    alert('Todos os campos são obrigatórios!')
-  }
+    //Informando que não foram preenchidos todos os inputs
+    erroInputs.textContent = '*Todos os campos são obrigatórios';
+  };
+};
 
 
+function adicionandoPlaca() {
+
+  divBotaoPlaca.classList.add('oculto');
+  botaoAdicionarViagem.classList.add('oculto');
+  divInputs.classList.add('oculto');
+
+  //Buscando a div do cadastro
+  const divCadastro = document.querySelector('.input_cadastro_placa');
+  //Buscando os botoes
+  const salvarCadastroPlaca = document.getElementById('salvar_cadastro_placa');
+  const cancelarCadastroPlaca = document.getElementById('cancelar_cadastro_placa');
+  //Buscando o paragrafo que contém a mensagens de erro 
+  const erroPlaca = document.getElementById('erro_placa');
+  //Buscando o valor do input
+  const numeroPlacaCadastro = document.getElementById('entrada_cadastro_placa');
+  //Removendo o classe oculto
+  divCadastro.classList.remove('oculto');
+  //Adicionando um evento de click no botão
+  erroPlaca.textContent = '';
+  salvarCadastroPlaca.addEventListener('click', () => {
+
+    //Criando uma condicional para verificar se o campo foi preenchido
+    if (numeroPlacaCadastro.value) {
+      if (numeroPlacaCadastro.value.length === 7) {
+
+
+        placasCadastradas.push({
+          placa: numeroPlacaCadastro.value.toUpperCase(),
+          viajando: false
+
+        });
+        atualizarDados();
+        numeroPlacaCadastro.value = '';
+        botaoAdicionarViagem.classList.remove('oculto');
+        divBotaoPlaca.classList.remove('oculto')
+        divInputs.classList.remove('oculto');
+        divCadastro.classList.add('oculto');
+        botaoRemoverPlaca.classList.remove('oculto');
+
+
+      } else {
+        erroPlaca.textContent = '*Favor revisar o numero dá placa';
+      }
+    } else {
+      erroPlaca.textContent = '*Favor preencher o número da placa';
+    }
+  })
+  cancelarCadastroPlaca.addEventListener('click', () => {
+    numeroPlacaCadastro.value = '';
+    botaoAdicionarViagem.classList.remove('oculto');
+    divBotaoPlaca.classList.remove('oculto')
+    divInputs.classList.remove('oculto');
+    divCadastro.classList.add('oculto');
+  })
 }
 
-btCadastrarPlaca.addEventListener('click', () => {
-  cadastrarPlacaSistema();
+function listaRemoverPlaca() {
+  const mensagemErro = placasCadastradas == '' ? '<div class="inputs_remover_placa aviso">*Você não tem placas cadastradas</div>' : '<div class="inputs_remover_placa"></div>'
+  opçoesPlacas.classList.remove('oculto')
+  opçoesPlacas.innerHTML = mensagemErro
+  placasCadastradas.forEach(i => {
+    opçoesPlacas.innerHTML += `          
+      <p class="info_placa_remover">
+      <span class="numero_placa_remover">${i.placa}</span>
+      <button class="btRemover_placa">Remover Placa</button>
+      </button>
+    </p>`;
+  });
+}
+
+function removerPlaca() {
+
+  const cancelarRemocao = document.getElementById('cancelar_remocao');
+  const inputDados = document.querySelector('.inputs_dados');
+
+  botaoAdicionarViagem.classList.add('oculto');
+  divBotaoPlaca.classList.add('oculto');
+  inputDados.classList.add('oculto');
+  cancelarRemocao.classList.remove('oculto');
+  listaRemoverPlaca()
+
+  const confirmarRemocao = document.querySelectorAll('.btRemover_placa');
+
+  confirmarRemocao.forEach((i, index) => {
+    i.addEventListener('click', () => {
+      placasCadastradas.splice(index, 1)
+      removerPlaca()
+      atualizarDados()
+
+    })
+  })
+  cancelarRemocao.addEventListener('click', () => {
+    botaoAdicionarViagem.classList.remove('oculto');
+    divBotaoPlaca.classList.remove('oculto');
+    inputDados.classList.remove('oculto');
+    cancelarRemocao.classList.add('oculto');
+    opçoesPlacas.classList.add('oculto');
+  })
+}
+
+botaoCadastrarPlaca.addEventListener('click', () => {
+  adicionandoPlaca();
 })
-btAdicionarViagem.addEventListener('click', () => {
+
+botaoRemoverPlaca.addEventListener('click', () => {
+  removerPlaca();
+})
+
+botaoAdicionarViagem.addEventListener('click', () => {
   adicionarViagem()
+  atualizarDados()
 })

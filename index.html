@@ -3,69 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="shortcut icon"
-      href="img/icone - frete.jpg"
-      type="image/x-icon"
-    />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style/style.css" />
     <script src="index.js" defer></script>
-    <title>Controle de Frota</title>
+    <title>Controle de frotas</title>
   </head>
+  <header class="cabecalho">
+    <h1 class="cabecalho_titulo">Controle de Frotas</h1>
+  </header>
   <body>
-    <header class="cabecalho">
-      <h1 class="cabecalho_titulo">Controle de Frotas - Daniel</h1>
-    </header>
-    <main class="corpo_documentacao">
-      <section class="sessao_viagens">
-        <table class="tabela_viagens">
-          <tr class="tabela_viagens_informacoes">
-            <th class="tabela_viagens_dados_titulo">Data Saída</th>
-            <th class="tabela_viagens_dados_titulo">Motorista</th>
-            <th class="tabela_viagens_dados_titulo">Placa Veículo</th>
-            <th class="tabela_viagens_dados_titulo">De</th>
-            <th class="tabela_viagens_dados_titulo">Até</th>
+    <main class="container">
+      <section class="container_sessao">
+        <table class="tabela" id="tabela_viagem">
+          <tr class="tabela_linha">
+            <th class="tabela_coluna tabela_titulo">Data</th>
+            <th class="tabela_coluna tabela_titulo">Motorista</th>
+            <th class="tabela_coluna tabela_titulo">Placa</th>
+            <th class="tabela_coluna tabela_titulo">Destido saida</th>
+            <th class="tabela_coluna tabela_titulo">Destino chegada</th>
           </tr>
         </table>
       </section>
-      <section class="sessao_cadasto">
-        <div class="adicionar_viagem">
-          <h2 class="adicionar_viagem_titulo">Dados da Viagem</h2>
-          <div class="adicionar_viagem_inputs">
-            <input class="data" type="date" name="input_data" />
-            <input class="motorista" type="text" placeholder="Motorista" />
-            <select class="placa" name="" id="">
-              <option class="placa_opcoes_titulo" disabled selected>
-                Placa do Veículo
+      <section class="container_sessao_inputs">
+        <div class="inputs_dados">
+          <div class="div_inputs">
+            <input class="inputs" type="date" id="input_data" />
+            <select class="inputs" name="placas_cadastradas" id="input_placas">
+              <option selected disabled value="Placa veículo">
+                Placa veículo
               </option>
             </select>
-            <input class="de" type="text" placeholder="Trajeto ida" />
-            <input class="ate" type="text" placeholder="Trajeto volta" />
-          </div>
-          <div class="dados_placa_div oculto">
-            <p class="alerta_placa"></p>
             <input
-              class="dados_placa_numero"
+              class="inputs"
               type="text"
-              placeholder="Informe a placa"
-              maxlength="7"
-              required
+              id="input_motorista"
+              placeholder="Motorista"
             />
-            <button class="bt bt_salvar_placa">Salvar</button>
-            <button class="bt bt_cancelar_cadastro">Cancelar</button>
+
+            <div>
+              <input
+                class="inputs"
+                type="text"
+                id="input_saida"
+                placeholder="Destino de saída"
+                required
+              />
+              <input
+                class="inputs"
+                type="text"
+                id="input_chegada"
+                placeholder="Destino de chegada"
+              />
+              <p class="aviso" id="erro_inputs"></p>
+            </div>
+          </div>
+          <div class="input_cadastro_placa oculto">
+            <input
+              class="inputs"
+              type="text"
+              maxlength="7"
+              placeholder="Digite o número da placa"
+              id="entrada_cadastro_placa"
+            />
+            <p class="aviso" id="erro_placa"></p>
+            <button class="botao" id="salvar_cadastro_placa">Salvar</button>
+            <button class="botao" id="cancelar_cadastro_placa">Cancelar</button>
           </div>
         </div>
-        <div class="adicionar_viagem_bt">
-          <button class="bt bt_cadastrar_placa">Cadastrar Placa</button>
-          <button class="bt bt_remover_placa">Remover Placa</button>
+        <div class="inputs_remover_placa"></div>
+        <div class="bts_placa">
+          <button class="botao" id="cadastrarPlaca">Cadastrar Placa</button>
+          <button class="botao" id="removerPlaca">Remover Placa</button>
         </div>
-        <button class="bt bt_adicionar_viagem">Adicionar Viagem</button>
+        <button class="botao" id="adicionar_viagem">Adicionar Viagem</button>
+        <button class="botao oculto" id="cancelar_remocao">Cancelar</button>
       </section>
     </main>
-    <section class="historico">
-      <p class="historico_dados">
-        <img class="img_historico" src="img/caminhao-icone.png" alt="" />
-      </p>
+    <section class="container_historico">
+      <h2 class="titulo_historico">Histórico de Viagens</h2>
+      <table class="tabela tabela_historico_dado" id="tabela_historico"></table>
     </section>
+    <footer class="rodape">
+      <h3 class="rodape_titulo">Criado e desenvolvido por Daniel de Souza</h3>
+    </footer>
   </body>
 </html>

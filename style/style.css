@@ -1,0 +1,162 @@
+@import url(reset.css);
+
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root{
+  --laranja:#E04100;
+  --branco:#FFFFFF;
+  --cinza:#aaaaaa;
+  --fonte--titulo:"Russo One", sans-serif;
+  --fonte--texto:"Exo 2", sans-serif;
+  --borda-padrao: 1px solid #E04100;
+}
+
+*{
+  font-family: var(--fonte--texto);
+  font-size: 14px;
+}
+
+.cabecalho{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5em 0 1em;
+  background: var(--laranja) url(/img/icon_carro.png) no-repeat center top;
+   
+  
+}
+.cabecalho_titulo{
+  font-size: 2em;
+  color: var(--branco);
+  font-family: var(--fonte--titulo);
+}
+.container{
+  display: flex;
+  justify-content: space-around;
+  margin: 2em 0;
+  height: 100%;
+}
+.container_sessao,.container_sessao_inputs,.container_historico{
+  text-align: center;
+  
+}
+.tabela_coluna {
+  border: 1px var(--laranja ) solid;
+  padding: 0.4em 1em;
+}
+.tabela_titulo{
+  font-size: 18px;
+  background-color: var(--laranja);
+  color: var(--branco);
+  border-color: var(--branco);
+}
+
+.botao_retorno{
+  margin-left: 1em;  
+}
+.inputs_dados{
+  width: 30em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: var(--borda-padrao);
+  border-radius: 10px;
+  padding: 2em;
+ 
+} 
+
+.inputs{
+  margin: 0.5em;
+  border: var(--borda-padrao);
+  padding: 10px;
+  border-radius: 24px;
+}
+input::placeholder{
+  text-align: center;
+}
+.info_placa_remover{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0.5em 0;
+  border: var(--borda-padrao);
+  padding:1em  ;
+  border-radius: 10px 20px ;
+}
+.numero_placa_remover{
+  font-weight: bold;
+}
+.btRemover_placa{
+  color: var(--laranja);
+  background: none;
+  border: var(--borda-padrao);
+  border-radius: 20px;
+  padding: 0.6em;
+}
+
+.btRemover_placa:hover{
+  background-color: var(--laranja);
+  color: var(--branco);
+}
+.aviso{
+  color: var(--cinza);
+  font-size: 4;
+  font-weight: bold;
+}
+.oculto{
+  display:none;
+}
+
+.botao{
+  background-color: var(--laranja);
+  border: var(--borda-padrao);
+  border-radius: 24px;
+  color: var(--branco);
+  padding: 10px;
+  margin: 0.5em;
+}
+.botao:hover{
+  background-color: var(--branco);
+  color: var(--laranja);
+}
+
+.titulo_historico{
+  font-family: var(--fonte--titulo);
+  background-color: var(--laranja);
+  font-size: 24px;
+  padding: 1em;
+  margin: 1em 0;
+  color: var(--branco); 
+}
+.container_historico{
+  display: flex;
+  flex-direction: column;
+}
+.tabela_historico_dado{
+  margin: 0 5em;
+}
+.rodape{
+  border: var(--borda-padrao);
+  bottom: 0;
+  width: 100%;
+  padding: 2em;
+  text-align: center;
+  margin-top: 3em;
+}
+.rodape_titulo{
+  font-size: 20px;
+  color: var(--laranja);
+  font-family: var(--fonte--titulo);
+}
+.img{
+  margin: 0 2em;
+  background-color: #E04100;
+}
+#img{
+  width: 10%;  
+}
+
+
