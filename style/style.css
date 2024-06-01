@@ -44,6 +44,11 @@
 .tabela_coluna {
   border: 1px var(--laranja ) solid;
   padding: 0.4em 1em;
+  font-family: var(--fonte--texto);
+  text-transform: lowercase;
+}
+.tabela_coluna::first-letter, .tabela_coluna_placa{
+  text-transform: uppercase;
 }
 .tabela_titulo{
   font-size: 18px;
@@ -145,6 +150,7 @@ input::placeholder{
   padding: 2em;
   text-align: center;
   margin-top: 3em;
+  
 }
 .rodape_titulo{
   font-size: 20px;

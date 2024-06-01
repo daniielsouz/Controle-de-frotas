@@ -55,7 +55,7 @@ function atualizarDados() {
     tabelaViagem.innerHTML += `
 <tr class="tabela_linha" index="${index}">
 <td class="tabela_coluna">${i.data}</td>
-<td class="tabela_coluna">${i.placa}</td>
+<td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
 <td class="tabela_coluna">${i.motorista}</td>
 <td class="tabela_coluna">${i.destinoSaida}</td>
 <td class="tabela_coluna">${i.destinoChegada}</td>
@@ -75,7 +75,7 @@ function atualizarDados() {
     <img src="/img/concluido.svg" alt="carro" id="img" />
   </td>
   <td class="tabela_coluna">${i.data}</td>
-  <td class="tabela_coluna">${i.placa}</td>
+  <td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
   <td class="tabela_coluna">${i.motorista}</td>
   <td class="tabela_coluna">${i.destinoSaida}</td>
   <td class="tabela_coluna">${i.destinoChegada}</td>
@@ -150,12 +150,13 @@ function adicionandoPlaca() {
   const erroPlaca = document.getElementById('erro_placa');
   //Buscando o valor do input
   const numeroPlacaCadastro = document.getElementById('entrada_cadastro_placa');
+
   //Removendo o classe oculto
   divCadastro.classList.remove('oculto');
   //Limpando os campos  
   erroPlaca.textContent = '';
   numeroPlacaCadastro.value = '';
-
+  numeroPlacaCadastro.focus()
   //Adicionando um evento de click no botão
   salvarCadastroPlaca.addEventListener('click', () => {
     const placaSalva = numeroPlacaCadastro.value.toUpperCase()
