@@ -8,8 +8,6 @@ const botaoAdicionarViagem = document.getElementById('adicionar_viagem');
 const botaoCadastrarPlaca = document.getElementById('cadastrarPlaca');
 const botaoRemoverPlaca = document.getElementById('removerPlaca');
 
-
-
 //Buscando os valores do input
 const valorData = document.getElementById('input_data');
 const placa = document.getElementById('input_placas');
@@ -17,7 +15,7 @@ const motorista = document.getElementById('input_motorista');
 const saida = document.getElementById('input_saida');
 const chegada = document.getElementById('input_chegada');
 //Buscando divs
-const divInputs = document.querySelector('.div_inputs')
+const divInputs = document.querySelector('.div_inputs');
 const divBotaoPlaca = document.querySelector('.bts_placa');
 const opçoesPlacas = document.querySelector('.inputs_remover_placa');
 
@@ -41,8 +39,8 @@ function atualizarDados() {
 
       placa.innerHTML += `<option value="${i.placa}">${i.placa}</option>
       `;
-    }
-  })
+    };
+  });
 
   tabelaViagem.innerHTML = `          
 <tr class="tabela_linha">
@@ -66,11 +64,11 @@ function atualizarDados() {
 </td>
 </tr>
 `;
-  })
+  });
 
   const botaoRetorno = document.querySelectorAll('.botao_retorno');
 
-  tabelaHistorico.innerHTML = ``
+  tabelaHistorico.innerHTML = ``;
   viagensConcluidas.forEach(i => {
     tabelaHistorico.innerHTML += `
     <td class="tabela_coluna img">
@@ -82,22 +80,21 @@ function atualizarDados() {
   <td class="tabela_coluna">${i.destinoSaida}</td>
   <td class="tabela_coluna">${i.destinoChegada}</td>
 </tr>
-  `
-  })
+  `;
+  });
 
   botaoRetorno.forEach((i, index) => {
     i.addEventListener('click', () => {
-      viagensConcluidas.push(viagens[index])
-      const placaRetornada = viagens[index].placa
+      viagensConcluidas.push(viagens[index]);
+      const placaRetornada = viagens[index].placa;
       placasCadastradas.forEach(i => {
         if (i.placa == placaRetornada) {
-          i.viajando = false
+          i.viajando = false;
         }
       })
       viagens.splice(index, 1)
-      atualizarDados()
+      atualizarDados();
     })
-
   })
 
   //Limpando todos os campos dos inputs 
@@ -106,7 +103,6 @@ function atualizarDados() {
   motorista.value = '';
   saida.value = '';
   chegada.value = '';
-
 }
 
 function adicionarViagem() {
@@ -124,14 +120,11 @@ function adicionarViagem() {
       destinoChegada: chegada.value,
     });
 
-    for (let i = 0; i < placasCadastradas.length; i++) {
-      for (let y = 0; y < viagens.length; y++) {
-        if (placasCadastradas[i].placa === viagens[y].placa) {
-          placasCadastradas[i].viajando = true
-        }
+    placasCadastradas.forEach(i => {
+      if (i.placa === placa.value) {
+        i.viajando = true;
       }
-    };
-
+    })
 
     //Limpando o campo de aviso 
     erroInputs.textContent = '';
@@ -159,29 +152,50 @@ function adicionandoPlaca() {
   const numeroPlacaCadastro = document.getElementById('entrada_cadastro_placa');
   //Removendo o classe oculto
   divCadastro.classList.remove('oculto');
-  //Adicionando um evento de click no botão
+  //Limpando os campos  
   erroPlaca.textContent = '';
+  numeroPlacaCadastro.value = '';
+
+  //Adicionando um evento de click no botão
   salvarCadastroPlaca.addEventListener('click', () => {
+    const placaSalva = numeroPlacaCadastro.value.toUpperCase()
+    //Criando uma condicional para verificar se o campo foi preenchido, se tem 7 caracteres e conferindo se a placa já não existe 
+    if (placaSalva) {
+      if (placaSalva.length === 7) {
+        if (placasCadastradas == '') {
 
-    //Criando uma condicional para verificar se o campo foi preenchido
-    if (numeroPlacaCadastro.value) {
-      if (numeroPlacaCadastro.value.length === 7) {
+          placasCadastradas.push({
+            placa: numeroPlacaCadastro.value.toUpperCase(),
+            viajando: false
 
+          });
+          atualizarDados();
+          botaoAdicionarViagem.classList.remove('oculto');
+          divBotaoPlaca.classList.remove('oculto')
+          divInputs.classList.remove('oculto');
+          divCadastro.classList.add('oculto');
+          botaoRemoverPlaca.classList.remove('oculto');
+        } else {
 
-        placasCadastradas.push({
-          placa: numeroPlacaCadastro.value.toUpperCase(),
-          viajando: false
+          placasCadastradas.forEach(i => {
+            if (i.placa === placaSalva) {
+              erroPlaca.textContent = '*Placa já está cadastrada';
+            } else {
+              placasCadastradas.push({
+                placa: numeroPlacaCadastro.value.toUpperCase(),
+                viajando: false
 
-        });
-        atualizarDados();
-        numeroPlacaCadastro.value = '';
-        botaoAdicionarViagem.classList.remove('oculto');
-        divBotaoPlaca.classList.remove('oculto')
-        divInputs.classList.remove('oculto');
-        divCadastro.classList.add('oculto');
-        botaoRemoverPlaca.classList.remove('oculto');
-
-
+              });
+              atualizarDados();
+              numeroPlacaCadastro.value = '';
+              botaoAdicionarViagem.classList.remove('oculto');
+              divBotaoPlaca.classList.remove('oculto')
+              divInputs.classList.remove('oculto');
+              divCadastro.classList.add('oculto');
+              botaoRemoverPlaca.classList.remove('oculto');
+            }
+          })
+        }
       } else {
         erroPlaca.textContent = '*Favor revisar o numero dá placa';
       }
