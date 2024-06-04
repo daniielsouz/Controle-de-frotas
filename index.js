@@ -1,8 +1,9 @@
 //Array criado para armazenar os dados da viagem
-let viagens = [];
-let viagensConcluidas = [];
+let viagens = JSON.parse(localStorage.getItem('viagens')) || [];
+let viagensConcluidas = JSON.parse(localStorage.getItem('viagensConcluidas')) || [];
 //Array criado para armazenar os dados das placas
-let placasCadastradas = [];
+let placasCadastradas = JSON.parse(localStorage.getItem('placasCadastradas')) || [];
+
 //Buscando botões
 const botaoAdicionarViagem = document.getElementById('adicionar_viagem');
 const botaoCadastrarPlaca = document.getElementById('cadastrarPlaca');
@@ -14,21 +15,28 @@ const placa = document.getElementById('input_placas');
 const motorista = document.getElementById('input_motorista');
 const saida = document.getElementById('input_saida');
 const chegada = document.getElementById('input_chegada');
+const numeroPlacaCadastro = document.getElementById('entrada_cadastro_placa');
 //Buscando divs
 const divInputs = document.querySelector('.div_inputs');
 const divBotaoPlaca = document.querySelector('.bts_placa');
 const opçoesPlacas = document.querySelector('.inputs_remover_placa');
+
+atualizarDados()
+
+function salvarDados(nomeFuncao, NomeDoArray) {
+  localStorage.setItem(nomeFuncao, JSON.stringify(NomeDoArray))
+}
 
 function atualizarDados() {
   //Buscando as div das tabelas
   const tabelaViagem = document.getElementById('tabela_viagem');
   const tabelaHistorico = document.getElementById('tabela_historico');
 
-
   placa.innerHTML = `            
   <option selected disabled value="Placa veículo">
   Placa veículo
   </option>`;
+
 
   placasCadastradas.forEach(i => {
     //Verificando se o veiculo está viajando,caso sim, será desabilitado a selação da placa até o retorno 
@@ -36,34 +44,33 @@ function atualizarDados() {
       placa.innerHTML += `<option value="${i.placa}" selected disabled>${i.placa}</option>
       `;
     } else {
-
       placa.innerHTML += `<option value="${i.placa}">${i.placa}</option>
       `;
     };
   });
-
   tabelaViagem.innerHTML = `          
-<tr class="tabela_linha">
-<th class="tabela_coluna tabela_titulo">Data</th>
-<th class="tabela_coluna tabela_titulo">Placa</th>
-<th class="tabela_coluna tabela_titulo">Motorista</th>
-<th class="tabela_coluna tabela_titulo">Destido saida</th>
-<th class="tabela_coluna tabela_titulo">Destino chegada</th>
-</tr>`;
+    <tr class="tabela_linha">
+    <th class="tabela_coluna tabela_titulo">Data</th>
+    <th class="tabela_coluna tabela_titulo">Placa</th>
+    <th class="tabela_coluna tabela_titulo">Motorista</th>
+    <th class="tabela_coluna tabela_titulo">Destido saida</th>
+    <th class="tabela_coluna tabela_titulo">Destino chegada</th>
+    </tr>
+    `;
 
   viagens.forEach((i, index) => {
     tabelaViagem.innerHTML += `
-<tr class="tabela_linha" index="${index}">
-<td class="tabela_coluna">${i.data}</td>
-<td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
-<td class="tabela_coluna">${i.motorista}</td>
-<td class="tabela_coluna">${i.destinoSaida}</td>
-<td class="tabela_coluna">${i.destinoChegada}</td>
-<td class="tabela_coluna_botao">
-  <button class="botao botao_retorno">Informar retorno</button>
-</td>
-</tr>
-`;
+      <tr class="tabela_linha" index="${index}">
+      <td class="tabela_coluna">${i.data}</td>
+      <td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
+      <td class="tabela_coluna">${i.motorista}</td>
+      <td class="tabela_coluna">${i.destinoSaida}</td>
+      <td class="tabela_coluna">${i.destinoChegada}</td>
+      <td class="tabela_coluna_botao">
+        <button class="botao botao_retorno">Informar retorno</button>
+      </td>
+      </tr>
+    `;
   });
 
   const botaoRetorno = document.querySelectorAll('.botao_retorno');
@@ -73,14 +80,13 @@ function atualizarDados() {
     tabelaHistorico.innerHTML += `
     <td class="tabela_coluna img">
     <img src="/img/concluido.svg" alt="carro" id="img" />
-  </td>
-  <td class="tabela_coluna">${i.data}</td>
-  <td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
-  <td class="tabela_coluna">${i.motorista}</td>
-  <td class="tabela_coluna">${i.destinoSaida}</td>
-  <td class="tabela_coluna">${i.destinoChegada}</td>
-</tr>
-  `;
+    </td>
+    <td class="tabela_coluna">${i.data}</td>
+    <td class="tabela_coluna tabela_coluna_placa">${i.placa}</td>
+    <td class="tabela_coluna">${i.motorista}</td>
+    <td class="tabela_coluna">${i.destinoSaida}</td>
+    <td class="tabela_coluna">${i.destinoChegada}</td>
+    `;
   });
 
   botaoRetorno.forEach((i, index) => {
@@ -91,10 +97,15 @@ function atualizarDados() {
         if (i.placa == placaRetornada) {
           i.viajando = false;
         }
+        salvarDados('placasCadastradas', placasCadastradas);
       })
       viagens.splice(index, 1)
       atualizarDados();
+      salvarDados('viagensConcluidas', viagensConcluidas);
+      salvarDados('viagens', viagens);
     })
+
+    salvarDados('placasCadastradas', placasCadastradas);
   })
 
   //Limpando todos os campos dos inputs 
@@ -103,6 +114,14 @@ function atualizarDados() {
   motorista.value = '';
   saida.value = '';
   chegada.value = '';
+}
+
+function placaViajando(placa) {
+  placasCadastradas.forEach(i => {
+    if (i.placa == placa) {
+      i.viajando = true
+    }
+  })
 }
 
 function adicionarViagem() {
@@ -121,26 +140,37 @@ function adicionarViagem() {
     });
 
     placasCadastradas.forEach(i => {
-      if (i.placa === placa.value) {
+      if (placaViajando(placa.value)) {
         i.viajando = true;
       }
+      atualizarDados()
     })
-
     //Limpando o campo de aviso 
     erroInputs.textContent = '';
   } else {
     //Informando que não foram preenchidos todos os inputs
     erroInputs.textContent = '*Todos os campos são obrigatórios';
   };
+  salvarDados('viagens', viagens)
 };
 
+function verificarPlaca(placa) {
+  return placasCadastradas.some(item => item.placa === placa);
+}
 
 function adicionandoPlaca() {
-
   divBotaoPlaca.classList.add('oculto');
   botaoAdicionarViagem.classList.add('oculto');
   divInputs.classList.add('oculto');
 
+  function escondendo() {
+    botaoAdicionarViagem.classList.remove('oculto');
+    divBotaoPlaca.classList.remove('oculto')
+    divInputs.classList.remove('oculto');
+    divCadastro.classList.add('oculto');
+    botaoRemoverPlaca.classList.remove('oculto');
+
+  }
   //Buscando a div do cadastro
   const divCadastro = document.querySelector('.input_cadastro_placa');
   //Buscando os botoes
@@ -148,12 +178,12 @@ function adicionandoPlaca() {
   const cancelarCadastroPlaca = document.getElementById('cancelar_cadastro_placa');
   //Buscando o paragrafo que contém a mensagens de erro 
   const erroPlaca = document.getElementById('erro_placa');
-  //Buscando o valor do input
-  const numeroPlacaCadastro = document.getElementById('entrada_cadastro_placa');
+
 
   //Removendo o classe oculto
   divCadastro.classList.remove('oculto');
   //Limpando os campos  
+
   erroPlaca.textContent = '';
   numeroPlacaCadastro.value = '';
   numeroPlacaCadastro.focus()
@@ -164,38 +194,27 @@ function adicionandoPlaca() {
     if (placaSalva) {
       if (placaSalva.length === 7) {
         if (placasCadastradas == '') {
-
           placasCadastradas.push({
-            placa: numeroPlacaCadastro.value.toUpperCase(),
+            placa: placaSalva,
             viajando: false
-
           });
+
           atualizarDados();
-          botaoAdicionarViagem.classList.remove('oculto');
-          divBotaoPlaca.classList.remove('oculto')
-          divInputs.classList.remove('oculto');
-          divCadastro.classList.add('oculto');
-          botaoRemoverPlaca.classList.remove('oculto');
+          escondendo()
         } else {
 
-          placasCadastradas.forEach(i => {
-            if (i.placa === placaSalva) {
-              erroPlaca.textContent = '*Placa já está cadastrada';
-            } else {
-              placasCadastradas.push({
-                placa: numeroPlacaCadastro.value.toUpperCase(),
-                viajando: false
+          if (verificarPlaca(placaSalva)) {
+            erroPlaca.textContent = '*Placa já está cadastrada';
+          } else {
 
-              });
-              atualizarDados();
-              numeroPlacaCadastro.value = '';
-              botaoAdicionarViagem.classList.remove('oculto');
-              divBotaoPlaca.classList.remove('oculto')
-              divInputs.classList.remove('oculto');
-              divCadastro.classList.add('oculto');
-              botaoRemoverPlaca.classList.remove('oculto');
-            }
-          })
+            placasCadastradas.push({
+              placa: numeroPlacaCadastro.value.toUpperCase(),
+              viajando: false
+            });
+
+            atualizarDados();
+            escondendo()
+          }
         }
       } else {
         erroPlaca.textContent = '*Favor revisar o numero dá placa';
@@ -203,13 +222,11 @@ function adicionandoPlaca() {
     } else {
       erroPlaca.textContent = '*Favor preencher o número da placa';
     }
+    salvarDados('placasCadastradas', placasCadastradas)
   })
   cancelarCadastroPlaca.addEventListener('click', () => {
     numeroPlacaCadastro.value = '';
-    botaoAdicionarViagem.classList.remove('oculto');
-    divBotaoPlaca.classList.remove('oculto')
-    divInputs.classList.remove('oculto');
-    divCadastro.classList.add('oculto');
+    escondendo()
   })
 }
 
@@ -245,6 +262,7 @@ function removerPlaca() {
       placasCadastradas.splice(index, 1)
       removerPlaca()
       atualizarDados()
+      salvarDados('placasCadastradas', placasCadastradas);
 
     })
   })
@@ -267,5 +285,5 @@ botaoRemoverPlaca.addEventListener('click', () => {
 
 botaoAdicionarViagem.addEventListener('click', () => {
   adicionarViagem()
-  atualizarDados()
+
 })

@@ -19,27 +19,36 @@
 
 .cabecalho{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5em 0 1em;
-  background: var(--laranja) url(/img/icon_carro.png) no-repeat center top;
-   
-  
+  background: var(--laranja) url(/img/icon_carro.png) no-repeat center top 40%;
+  height: 100vh; 
 }
 .cabecalho_titulo{
   font-size: 2em;
   color: var(--branco);
   font-family: var(--fonte--titulo);
 }
+.cabecalho_texto{
+  color: var(--branco);
+  font-family: var(--fonte--titulo);
+}
 .container{
   display: flex;
   justify-content: space-around;
-  margin: 2em 0;
+  padding: 2em 0;
   height: 100%;
 }
 .container_sessao,.container_sessao_inputs,.container_historico{
   text-align: center;
-  
+}
+.container_sessao{
+  width: 50vw;
+}
+.container_sessao_inputs{
+  height: 50vh;
+  width: 50;
 }
 .tabela_coluna {
   border: 1px var(--laranja ) solid;
@@ -146,8 +155,7 @@ input::placeholder{
 .rodape{
   border: var(--borda-padrao);
   bottom: 0;
-  width: 100%;
-  padding: 2em;
+  padding: 2em 0;
   text-align: center;
   margin-top: 3em;
   
